@@ -51,11 +51,12 @@ async function routes (fastify) {
     fastify.put('/:id', { schema: tripsSchema.updateTrip }, async (request, reply) => {
         const id = request.params.id
         const { title, notes, start_date, end_date } = request.body
+        const modified_at = new Date()
 
         const query = {
             text: `UPDATE trips SET title=$1, notes=$2, 
-                        start_date=$3, end_date=$4 WHERE trip_id=$5`,
-            values: [title, notes, start_date, end_date, id]
+                        start_date=$3, end_date=$4, modified_at=$5 WHERE trip_id=$6`,
+            values: [title, notes, start_date, end_date, modified_at, id]
         }
 
         try {
@@ -81,6 +82,6 @@ async function routes (fastify) {
             throw new Error(err)
         }
     })
-  }
+}
 
 module.exports = routes
