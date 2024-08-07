@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@fastify/postgres": "^5.2.2",
+    "@prisma/client": "^5.18.0",
     "dotenv": "^16.4.5",
     "fastify": "^4.28.1",
     "fastify-plugin": "^4.5.1",
@@ -8,7 +9,8 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "prisma": "^5.18.0"
   },
   "scripts": {
     "start-dev": "nodemon src/server.js"

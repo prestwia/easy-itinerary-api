@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "trips" ALTER COLUMN "modified_at" SET DEFAULT CURRENT_TIMESTAMP;

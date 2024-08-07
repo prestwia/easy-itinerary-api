@@ -12,6 +12,7 @@ fastify.register(dbconnector)
 
 /* register routes */
 fastify.register(require('./routes/trips.js'), { prefix: '/trips' })
+// fastify.register(require('./routes/lodgingEvents.js'), { prefix: '/lodgingEvents'})
 
 // Run the server
 fastify.listen({ port: PORT, host: 'localhost' }, function (err, address) {

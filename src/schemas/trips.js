@@ -4,12 +4,21 @@ const trip = {
             type: 'object',
             required: ['trip_id', 'user_id'],
             properties: {
-                trip_id: { type: 'string',  format: 'uuid' },                                                              
-                title: { type: 'string' },    
-                notes: { type: 'string' },                                        
-                start_date:{ type: 'string', format: "date" },                  
-                end_date:{ type: 'string', format: "date" },    
-                user_id: { type: 'string' }
+                title: { type: 'string' },
+                notes: { type: 'string' },
+                start_date: { type: 'string', format: 'date' },
+                end_date: { type: 'string', format: 'date' },
+                trip_id: { type: 'string', format: 'uuid' },
+                user_id: { type: 'integer' }
+            }
+        },
+        '4xx': {
+            type: 'object',
+            required: ['error', 'message', 'statusCode'],
+            properties: {
+                error: { type: 'string' },
+                message: { type: 'string' },
+                statsuCode: { type: 'string' }
             }
         }
     }
@@ -22,6 +31,15 @@ const tripIdList = {
             required: ['trip_id'],
             properties: {
                 trip_id: { type: 'string', format: 'uuid' }
+            }
+        },
+        '4xx': {
+            type: 'object',
+            required: ['error', 'message', 'statusCode'],
+            properties: {
+                error: { type: 'string' },
+                message: { type: 'string' },
+                statsuCode: { type: 'string' }
             }
         }
     }
@@ -44,13 +62,13 @@ const addTrip = {
             },                                        
             start_date: { 
                 type: 'string', 
-                format: "date",
+                format: "date-time",
                 nullable: true,
                 default: null
             },                  
             end_date: { 
                 type: 'string', 
-                format: "date",
+                format: "date-time",
                 nullable: true,
                 default: null
             }, 
@@ -61,8 +79,25 @@ const addTrip = {
     response: {
         201: {
             type: 'object',
+            required: ['trip_id', 'user_id'],
             properties: {
-                created: { type: 'boolean' }
+                title: { type: 'string' },
+                notes: { type: 'string' },
+                start_date: { type: 'string', format: 'date-time' },
+                end_date: { type: 'string', format: 'date-time' },
+                user_id: { type: 'integer' },
+                trip_id: { type: 'string', format: 'uuid' },
+                created_at: { type: 'string', format: 'date-time' },
+                modified_at: { type: 'string', format: 'date-time' }
+            }
+        },
+        '4xx': {
+            type: 'object',
+            required: ['error', 'message', 'statusCode'],
+            properties: {
+                error: { type: 'string' },
+                message: { type: 'string' },
+                statsuCode: { type: 'string' }
             }
         }
     }
@@ -77,19 +112,36 @@ const updateTrip = {
             notes: { type: 'string' },                                        
             start_date: { 
                 type: 'string', 
-                format: "date"
+                format: "date-time"
             },                  
             end_date: { 
                 type: 'string', 
-                format: "date"
+                format: "date-time"
             },
         }
     },
     response: {
         200: {
             type: 'object',
+            required: ['trip_id', 'user_id'],
             properties: {
-                updated: { type: 'boolean' }
+                title: { type: 'string' },
+                notes: { type: 'string' },
+                start_date: { type: 'string', format: 'date-time' },
+                end_date: { type: 'string', format: 'date-time' },
+                user_id: { type: 'integer' },
+                trip_id: { type: 'string', format: 'uuid' },
+                created_at: { type: 'string', format: 'date-time' },
+                modified_at: { type: 'string', format: 'date-time' }
+            }
+        },
+        '4xx': {
+            type: 'object',
+            required: ['error', 'message', 'statusCode'],
+            properties: {
+                error: { type: 'string' },
+                message: { type: 'string' },
+                statsuCode: { type: 'string' }
             }
         }
     }
@@ -100,7 +152,16 @@ const deleteTrip = {
         200: {
             type: 'object',
             properties: {
-                deleted: { type: 'boolean' }
+                trip_id: { type: 'string', format: 'uuid' }
+            }
+        },
+        '4xx': {
+            type: 'object',
+            required: ['error', 'message', 'statusCode'],
+            properties: {
+                error: { type: 'string' },
+                message: { type: 'string' },
+                statsuCode: { type: 'string' }
             }
         }
     }
