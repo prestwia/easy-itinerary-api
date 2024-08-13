@@ -1,11 +1,11 @@
 const { PrismaClient } = require('@prisma/client')
 
-const lodgingEventSchema = require('../schemas/lodgingEvents')
+const travelEventSchema = require('../schemas/travelEvents')
 
 async function routes (fastify) {
     const prisma = new PrismaClient()
 
-    fastify.get('/:id', { schema: lodgingEventSchema.lodgingEvent }, async (request, reply) => {
+    fastify.get('/:id', { schema: travelEventSchema.travelEvent }, async (request, reply) => {
         const id = parseInt(request.params.id)
         if (isNaN(id)) {
             reply.code(400)
@@ -18,12 +18,12 @@ async function routes (fastify) {
         }
 
         try { 
-            const lodgingEvent = await prisma.lodgingevents.findUnique({
+            const travelEvent = await prisma.travelevents.findUnique({
                 where: {
-                  lodging_event_id: id,
+                  travel_event_id: id,
                 },
             })
-            if (lodgingEvent === null) {
+            if (travelEvent === null) {
                 reply.code(404)
                 reply.send({ 
                     error: "Not Found", 
@@ -31,34 +31,34 @@ async function routes (fastify) {
                     statusCode: "404" 
                 })
             } else {
-                reply.send(lodgingEvent)
+                reply.send(travelEvent)
             }
         } catch(err) { 
             throw new Error(err) 
         }
     })
 
-    fastify.get('/trips/:id', { schema: lodgingEventSchema.lodgingEventList }, async (request, reply) => {
+    fastify.get('/trips/:id', { schema: travelEventSchema.travelEventList }, async (request, reply) => {
         const trip_id = request.params.id
 
         try { 
-            const lodgingEvents = await prisma.lodgingevents.findMany({
+            const travelEvents = await prisma.travelevents.findMany({
                 where: {
                   trip_id: trip_id,
                 },
             })
-            reply.send(lodgingEvents)
+            reply.send(travelEvents)
         } catch(err) { 
             throw new Error(err) 
         }
     })
 
-    fastify.post('/', { schema: lodgingEventSchema.addLodgingEvent }, async (request, reply) => {
-        const { address, lodging_type, start_time, end_time, notes, trip_id } = request.body
+    fastify.post('/', { schema: travelEventSchema.addTravelEvent },  async (request, reply) => {
+        const { travel_method, start_location, end_location, start_time, end_time, notes, trip_id } = request.body
 
         let start_time_iso = null
         let end_time_iso = null
-        if (start_time) {
+        if (start_time !== null) {
             start_time_iso = new Date(start_time).toISOString()
         }
         if (end_time !== null) {
@@ -66,24 +66,25 @@ async function routes (fastify) {
         }
 
         try {
-            const lodgingEvent = await prisma.lodgingevents.create({
+            const travelEvent = await prisma.travelevents.create({
                 data: {
-                    address: address,
+                    travel_method: travel_method,
+                    start_location: start_location,
+                    end_location: end_location,
                     notes: notes, 
-                    lodging_type: lodging_type,
                     start_time: start_time_iso,
                     end_time: end_time_iso,
                     trip_id: trip_id
                 }
             })
             reply.code(201)
-            reply.send(lodgingEvent)
+            reply.send(travelEvent)
         } catch (err) {
             throw new Error(err)
         }
     })
 
-    fastify.put('/:id', { schema: lodgingEventSchema.updateLodgingEvent }, async (request, reply) => {
+    fastify.put('/:id', { schema: travelEventSchema.updateTravelEvent }, async (request, reply) => {
         const id = parseInt(request.params.id)
         if (isNaN(id)) {
             reply.code(400)
@@ -94,8 +95,7 @@ async function routes (fastify) {
             })
             return 
         }
-
-        const { address, lodging_type, start_time, end_time, notes } = request.body
+        const { travel_method, start_location, end_location, start_time, end_time, notes } = request.body
         const modified_at = new Date()
 
         let start_time_iso = null
@@ -108,26 +108,27 @@ async function routes (fastify) {
         }
 
         try {
-            const updatedLodgingEvent = await prisma.lodgingevents.update({
+            const updatedTravelEvent = await prisma.travelevents.update({
                 where: {
-                    lodging_event_id: id
+                    travel_event_id: id
                 },
                 data: {
-                    address: address,
+                    travel_method: travel_method,
+                    start_location: start_location,
+                    end_location: end_location,
                     notes: notes,
-                    lodging_type: lodging_type,
                     start_time: start_time_iso,
                     end_time: end_time_iso,
                     modified_at: modified_at
                 }
             })
-            reply.send(updatedLodgingEvent)
+            reply.send(updatedTravelEvent)
         } catch(err) {
             throw new Error(err)
         }
     })
 
-    fastify.delete('/:id', { schema: lodgingEventSchema.deleteLodgingEvent }, async (request, reply) => {
+    fastify.delete('/:id', { schema: travelEventSchema.deleteTravelEvent }, async (request, reply) => {
         const id = parseInt(request.params.id)
         if (isNaN(id)) {
             reply.code(400)
@@ -140,12 +141,12 @@ async function routes (fastify) {
         }
 
         try {
-            const deletedLodgingEvent = await prisma.lodgingevents.delete({
+            const deletedTravelEvent = await prisma.travelevents.delete({
                 where: {
-                    lodging_event_id: id
+                    travel_event_id: id
                 }
             })
-            reply.send(deletedLodgingEvent)
+            reply.send(deletedTravelEvent)
         } catch(err) {
             throw new Error(err)
         }

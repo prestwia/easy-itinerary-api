@@ -6,13 +6,11 @@ const fastify = require('fastify')({
   logger: true
 })
 
-/* Connect to postgres db */
-const dbconnector = require('./plugins/postgres.js')
-fastify.register(dbconnector)
-
 /* register routes */
 fastify.register(require('./routes/trips.js'), { prefix: '/trips' })
-// fastify.register(require('./routes/lodgingEvents.js'), { prefix: '/lodgingEvents'})
+fastify.register(require('./routes/lodgingEvents.js'), { prefix: '/lodgingEvents'})
+fastify.register(require('./routes/activityEvents.js'), { prefix: '/activityEvents'})
+fastify.register(require('./routes/travelEvents.js'), { prefix: '/travelEvents'})
 
 // Run the server
 fastify.listen({ port: PORT, host: 'localhost' }, function (err, address) {

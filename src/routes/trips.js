@@ -8,12 +8,26 @@ async function routes (fastify) {
 
     fastify.get('/:id', { schema: tripsSchema.trip }, async (request, reply) => {
         const id = request.params.id
+        if (!id) {
+            reply.code(400)
+            reply.send({ 
+                error: "Bad Request", 
+                message: "Request parameter must be an integer", 
+                statusCode: "400" 
+            })
+            return 
+        }
 
         try { 
             const trip = await prisma.trips.findUnique({
                 where: {
-                  trip_id: id,
+                    trip_id: id,
                 },
+                include: {
+                    lodgingevents: true,
+                    activityevents: true,
+                    travelevents: true
+                }
             })
             if (trip === null) {
                 reply.code(404)
@@ -30,9 +44,9 @@ async function routes (fastify) {
         }
     })
 
-    fastify.get('/user/:id', async (request, reply) => {
+    fastify.get('/user/:id', { schema: tripsSchema.tripIdList }, async (request, reply) => {
         const user_id = parseInt(request.params.id)
-        if (isNaN(user_id)) {
+        if (!user_id || isNaN(user_id)) {
             reply.code(400)
             reply.send({ 
                 error: "Bad Request", 

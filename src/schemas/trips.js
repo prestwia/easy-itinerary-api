@@ -9,7 +9,61 @@ const trip = {
                 start_date: { type: 'string', format: 'date' },
                 end_date: { type: 'string', format: 'date' },
                 trip_id: { type: 'string', format: 'uuid' },
-                user_id: { type: 'integer' }
+                user_id: { type: 'integer' },
+                lodgingevents: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        required: ['trip_id', 'lodging_event_id'],
+                        properties: {
+                            address: { type: 'string' },
+                            lodging_type: { type: 'string' },
+                            start_time: { type: 'string', format: 'date-time' },
+                            end_time: { type: 'string', format: 'date-time' },
+                            notes: { type: 'string' },
+                            trip_id: { type: 'string', format: 'uuid' },
+                            lodging_event_id: { type: 'integer' }
+                        }
+                    }
+                },
+                activityevents: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        required: ['trip_id', 'activity_event_id'],
+                        properties: {
+                            title: { type: 'string' },
+                            description: { type: 'string' },
+                            address: { type: 'string' },
+                            start_time: { type: 'string', format: 'date-time' },
+                            end_time: { type: 'string', format: 'date-time' },
+                            notes: { type: 'string' },
+                            trip_id: { type: 'string', format: 'uuid' },
+                            created_at: { type: 'string', format: 'date-time'},
+                            modified_at: { type: 'string', format: 'date-time'},
+                            activity_event_id: { type: 'integer' }
+                        }
+                    }
+                },
+                travelevents: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        required: ['trip_id', 'travel_event_id'],
+                        properties: {
+                            travel_method: { type: 'string' },
+                            start_location: { type: 'string' },
+                            end_location: { type: 'string' },
+                            start_time: { type: 'string', format: 'date-time' },
+                            end_time: { type: 'string', format: 'date-time' },
+                            notes: { type: 'string' },
+                            trip_id: { type: 'string', format: 'uuid' },
+                            created_at: { type: 'string', format: 'date-time'},
+                            modified_at: { type: 'string', format: 'date-time'},
+                            travel_event_id: { type: 'integer' }
+                        }
+                    }
+                }
             }
         },
         '4xx': {
@@ -28,9 +82,14 @@ const tripIdList = {
     response: {
         200: {
             type: 'array',
-            required: ['trip_id'],
-            properties: {
-                trip_id: { type: 'string', format: 'uuid' }
+            items: {
+                type: 'object',
+                required: ['trip_id'],
+                properties: {
+                    trip_id: { type: 'string', format: 'uuid' },
+                    title: { type: 'string' },
+                    modified_at: { type: 'string', format: 'date-time' }
+                }
             }
         },
         '4xx': {
